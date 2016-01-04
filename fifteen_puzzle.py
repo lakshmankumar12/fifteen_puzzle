@@ -5,12 +5,6 @@ import random
 import curses
 import sys
 
-def debug_print(string):
-  #print(string)
-  pass
-
-allowed_opeartions=['L','R','U','D']
-
 def stringize_board(board):
   b = 0
   result = "|----+----+----+----|\n"
@@ -29,7 +23,6 @@ def print_board(board):
   print(stringize_board(board),end="")
 
 def count_inversions(sequence,size):
-  debug_print("Got sequence %s and size:%d"%(sequence, size))
   if size <= 1:
     return (0,sequence)
   if size == 2:
@@ -39,13 +32,11 @@ def count_inversions(sequence,size):
       t = sequence[0]
       sequence[0] = sequence[1]
       sequence[1] = t
-      debug_print("Transformed to sequence %s and size:%d and returning result %d"%(sequence, size, 1))
       return (1,sequence)
   left = size/2
   right = size - left
   (left_inv, sequence[:left]) = count_inversions(sequence[:left], left)
   (right_inv, sequence[left:]) = count_inversions(sequence[left:], right)
-  debug_print("Starting with left:%s and right:%s"%(sequence[:left], sequence[left:]))
   l = 0
   r = left
   invers = 0
@@ -66,12 +57,11 @@ def count_inversions(sequence,size):
     new_merge.extend(sequence[l:left])
   sequence[0:size] = new_merge
   result =  left_inv + right_inv + invers
-  debug_print("Transformed to sequence %s and size:%d and returning result %d"%(sequence, size, result))
   return (result, sequence)
 
 def is_valid_board(board):
   copy_board = board[:]
-  #where is 0 the hold
+  #where is 0 the hole
   holeAt = copy_board.index(0)
   holeAt = holeAt/4
   if holeAt == 0 or holeAt == 2:
@@ -97,23 +87,6 @@ def generate_board():
   if attempts > max_attempts:
     raise(Exception("Couldn't get a valid board after 5 attempts"))
   return board
-
-def get_user_input():
-  got = 0
-  attempts = 1
-  allowed_opeartions
-  while not got:
-    op1 = raw_input("Enter your choice (L/R/U/D):")
-    op = op1.upper()
-    if op not in allowed_opeartions:
-      print("Enter one of L/R/U/D. You did %s"%op1)
-    else:
-      break;
-    attempts += 1
-    if attempts > 3:
-      print("Too many attempts")
-      sys.exit(1)
-  return op
 
 def draw_board_and_user_input(stdscr, board_str, moves):
   stdscr.clear()
@@ -159,20 +132,6 @@ def curses_print_and_input_function(stdscr, board_str, moves, user_input_result)
   if not got:
     user_input_result.append('B')
   return
-
-def valid_user_input(input_key):
-  operation = None
-  if input_key == curses.KEY_RIGHT:
-    operation = 'R'
-  elif input_key == curses.KEY_LEFT:
-    operation = 'L'
-  elif input_key == curses.KEY_UP:
-    operation = 'U'
-  elif input_key == curses.KEY_DOWN:
-    operation = 'D'
-  else:
-    return (0,None)
-  return (1,operation)
 
 winning_board = []
 def is_board_won(board):
