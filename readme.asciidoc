@@ -8,3 +8,19 @@ I referred http://mathworld.wolfram.com/15Puzzle.html[this site] to realize
 that not all combinations are valid possibilites! So, we use the inversion
 count as suggested here to build a valid board.
 
+----
+$ ./fifteen_puzzle.py
+
+|----+----+----+----|
+|  3 |  4 |  6 | 14 |
+|----+----+----+----|
+| 15 |  8 | 13 | 10 |
+|----+----+----+----|
+| 11 |  1 |  7 |  9 |
+|----+----+----+----|
+|    |  5 |  2 | 12 |
+|----+----+----+----|
+
+     Moves So Far:0
+          Your Move (Press any arrow keys or ctrl-C):
+----
