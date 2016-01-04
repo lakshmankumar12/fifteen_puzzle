@@ -99,15 +99,26 @@ def get_user_input():
   allowed_opeartions
   while not got:
     op1 = raw_input("Enter your choice (L/R/U/D):")
-    op = op1.toUpper()
+    op = op1.upper()
     if op not in allowed_opeartions:
       print("Enter one of L/R/U/D. You did %s"%op1)
+    else:
       break;
     attempts += 1
     if attempts > 3:
       print("Too many attempts")
       sys.exit(1)
   return op
+
+winning_board = []
+def is_board_won(board):
+  global winning_board
+  if not winning_board:
+    winning_board = list(range(1,16))
+    winning_board.extend([0])
+  if board == winning_board:
+    return True
+  return False
 
 def operate_on_board(board, operation):
   ''' Operation
@@ -142,19 +153,18 @@ def operate_on_board(board, operation):
   return 1;
 
 def main():
-  a = generate_board()
-  operate_on_board(a,'L')
-  print("board after L")
-  print_board(a)
-  operate_on_board(a,'L')
-  print("board after L")
-  print_board(a)
-  operate_on_board(a,'L')
-  print("board after L")
-  print_board(a)
-  operate_on_board(a,'L')
-  print("board after L")
-  print_board(a)
+  board = generate_board()
+  won = False
+  moves = 0
+  while not won:
+    print_board(board)
+    print("Moves so far: %d"%moves)
+    op = get_user_input()
+    operate_on_board(board,op)
+    won = is_board_won(board)
+    moves += 1
+  print_board(board)
+  print("You did it in %d moves"%moves)
 
 if __name__ == '__main__':
     main()
