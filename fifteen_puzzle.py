@@ -2,6 +2,8 @@
 
 from __future__ import print_function
 import random
+import curses
+import sys
 
 def debug_print(string):
   #print(string)
@@ -113,6 +115,65 @@ def get_user_input():
       sys.exit(1)
   return op
 
+def draw_board_and_user_input(stdscr, board_str, moves):
+  stdscr.clear()
+  stdscr.move(5,0);
+  stdscr.addstr(board_str, curses.color_pair(1))
+  stdscr.move(15,5);
+  stdscr.addstr("Moves So Far:%d"%moves, curses.color_pair(1))
+  stdscr.move(16,5);
+  stdscr.addstr("Your Move (Press any arrow keys or ctrl-C):", curses.color_pair(1))
+  stdscr.refresh()
+
+def valid_user_input(input_key):
+  operation = None
+  if input_key == curses.KEY_RIGHT:
+    operation = 'R'
+  elif input_key == curses.KEY_LEFT:
+    operation = 'L'
+  elif input_key == curses.KEY_UP:
+    operation = 'U'
+  elif input_key == curses.KEY_DOWN:
+    operation = 'D'
+  else:
+    return (0,None)
+  return (1,operation)
+
+def curses_print_and_input_function(stdscr, board_str, moves, user_input_result):
+  curses.init_pair(1, curses.COLOR_WHITE, curses.COLOR_BLACK)
+  attempt = 0
+  got = 0
+  draw_board_and_user_input(stdscr, board_str, moves)
+  while not got and attempt < 3:
+    result = stdscr.getch()
+    (ok,op) = valid_user_input(result)
+    if ok:
+      got = 1
+      user_input_result.append(op)
+      break;
+    attempt += 1
+    stdscr.move(17,5);
+    stdscr.addstr("That was not a valid input:%d, attempt:%d"%(result,attempt))
+    stdscr.move(16,48);
+    stdscr.refresh()
+  if not got:
+    user_input_result.append('B')
+  return
+
+def valid_user_input(input_key):
+  operation = None
+  if input_key == curses.KEY_RIGHT:
+    operation = 'R'
+  elif input_key == curses.KEY_LEFT:
+    operation = 'L'
+  elif input_key == curses.KEY_UP:
+    operation = 'U'
+  elif input_key == curses.KEY_DOWN:
+    operation = 'D'
+  else:
+    return (0,None)
+  return (1,operation)
+
 winning_board = []
 def is_board_won(board):
   global winning_board
@@ -160,10 +221,13 @@ def main():
   won = False
   moves = 0
   while not won:
-    print_board(board)
-    print("Moves so far: %d"%moves)
-    op = get_user_input()
-    operate_on_board(board,op)
+    op = []
+    board_str = stringize_board(board)
+    curses.wrapper(curses_print_and_input_function, board_str, moves, op)
+    if op[0] == 'B':
+      print("Too many bad inputs..Terminating")
+      sys.exit(1)
+    operate_on_board(board,op[0])
     won = is_board_won(board)
     moves += 1
   print_board(board)
