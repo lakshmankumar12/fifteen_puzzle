@@ -78,12 +78,56 @@ def is_valid_board(board):
   else:
     return 0
 
+def operate_on_board(board, operation):
+  ''' Operation
+       'L','R','U','D'
+      Respectively refer left,right,up,down
+
+      When left is done, the number moves left. That is hole moves right.
+  '''
+  holeAt = board.index(0)
+  LeftNotOk  = [3,7,11,15]
+  RightNotOk = [0,4,8,12]
+  UpNotOk    = [12,13,14,15]
+  DownNotOk  = [0,1,2,3]
+  if operation == 'L':
+    notAllowedPositions = LeftNotOk
+    swapIndex = holeAt + 1
+  elif operation == 'R':
+    notAllowedPositions = RightNotOk
+    swapIndex = holeAt - 1
+  elif operation == 'U':
+    notAllowedPositions = UpNotOk
+    swapIndex = holeAt + 4
+  elif operation == 'D':
+    notAllowedPositions = DownNotOk
+    swapIndex = holeAt - 4
+  else:
+    raise Exception("Invalid operation:%s"%operation)
+  if holeAt in notAllowedPositions:
+    return 0;
+  board[holeAt] = board[swapIndex]
+  board[swapIndex] = 0
+  return 1;
+
 def main():
   a = range(15,-1,-1)
   random.shuffle(a)
   print_board(a)
   valid = is_valid_board(a)
   print("valid is %d"%valid)
+  operate_on_board(a,'L')
+  print("board after L")
+  print_board(a)
+  operate_on_board(a,'L')
+  print("board after L")
+  print_board(a)
+  operate_on_board(a,'L')
+  print("board after L")
+  print_board(a)
+  operate_on_board(a,'L')
+  print("board after L")
+  print_board(a)
 
 if __name__ == '__main__':
     main()
