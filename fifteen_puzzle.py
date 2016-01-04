@@ -9,18 +9,22 @@ def debug_print(string):
 
 allowed_opeartions=['L','R','U','D']
 
-def print_board(board):
+def stringize_board(board):
   b = 0
-  print("|----+----+----+----|")
+  result = "|----+----+----+----|\n"
   for i in range(4):
-    print("|",end="")
+    result += "|"
     for j in range(4):
       if board[b]:
-        print(" %2d |"%board[b],end="")
+        result += " %2d |"%board[b]
       else:
-        print("    |",end="")
+        result += "    |"
       b += 1
-    print("\n|----+----+----+----|")
+    result += "\n|----+----+----+----|\n"
+  return result
+
+def print_board(board):
+  print(stringize_board(board),end="")
 
 def count_inversions(sequence,size):
   debug_print("Got sequence %s and size:%d"%(sequence, size))
@@ -74,7 +78,6 @@ def is_valid_board(board):
     toAdd = 0
   copy_board.remove(0)  # remove 0 off the board
   (inversions, copy_board) = count_inversions(copy_board,len(copy_board))
-  print("Inverstions was %d"%inversions)
   if ( inversions + toAdd ) % 2 == 0:
     return 1
   else:
