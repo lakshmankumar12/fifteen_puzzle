@@ -7,6 +7,8 @@ def debug_print(string):
   #print(string)
   pass
 
+allowed_opeartions=['L','R','U','D']
+
 def print_board(board):
   b = 0
   print("|----+----+----+----|")
@@ -78,6 +80,35 @@ def is_valid_board(board):
   else:
     return 0
 
+def generate_board():
+  attempts = 0
+  max_attempts = 5
+  while attempts < max_attempts:
+    board = range(15,-1,-1)
+    random.shuffle(board)
+    valid = is_valid_board(board)
+    if valid:
+      break
+  if attempts > max_attempts:
+    raise(Exception("Couldn't get a valid board after 5 attempts"))
+  return board
+
+def get_user_input():
+  got = 0
+  attempts = 1
+  allowed_opeartions
+  while not got:
+    op1 = raw_input("Enter your choice (L/R/U/D):")
+    op = op1.toUpper()
+    if op not in allowed_opeartions:
+      print("Enter one of L/R/U/D. You did %s"%op1)
+      break;
+    attempts += 1
+    if attempts > 3:
+      print("Too many attempts")
+      sys.exit(1)
+  return op
+
 def operate_on_board(board, operation):
   ''' Operation
        'L','R','U','D'
@@ -111,11 +142,7 @@ def operate_on_board(board, operation):
   return 1;
 
 def main():
-  a = range(15,-1,-1)
-  random.shuffle(a)
-  print_board(a)
-  valid = is_valid_board(a)
-  print("valid is %d"%valid)
+  a = generate_board()
   operate_on_board(a,'L')
   print("board after L")
   print_board(a)
