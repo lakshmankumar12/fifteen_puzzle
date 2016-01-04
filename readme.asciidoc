@@ -1,0 +1,13 @@
+Fifteen Puzzle
+===============
+
+Attempt at doing a Fifteen Puzzle. I used to play this in Foxpro during school
+days. Just realized that this is referred as Fifteen puzzle.
+
+I referred http://mathworld.wolfram.com/15Puzzle.html[this site] to realize
+that not all combinations are valid possibilites! So, we use the inversion
+count as suggested here to build a valid board.
+
+For now, no interactive support - so user has to manually type one of l/u/r/d
+keys to effect moves. Pretty boring, but building arrow-key inputs into python
+but retaining otherwise text layout seems painfully difficult.
